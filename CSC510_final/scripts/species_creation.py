@@ -1,5 +1,5 @@
 import random
-from symbolic_ai_test import RuleEngine, rule_resource_health, rule_predator_prey, rule_self_aggression, rule_reproduction
+from scripts.symbolic_ai_test import RuleEngine, rule_resource_health, rule_predator_prey, rule_self_aggression, rule_reproduction
 
 # Species class
 class Species:
@@ -112,66 +112,3 @@ if __name__ == "__main__":
                 forest.display_status()
 
     main()
-
-'''
-# Main simulation
-if __name__ == "__main__":
-    # Define ecosystem areas
-    ecosystem_areas = ["ForestA", "ForestB", "ForestC"]
-    
-    # Initialize forest assignments
-    ecosystem = []
-    for area in ecosystem_areas:
-        # Creating species classes
-        carnivore_species = Species(random.choice(["Wolf", "Fox", "Bear"]), starting_population=10, aggression=4)
-        herbivore_species = Species(random.choice(["Boar", "Deer", "Rabbit"]), starting_population=10, predators=[carnivore_species], aggression=0)
-        herbs_species = Species(random.choice(["Apples", "Corn", "Blueberry"]), starting_population=10, predators=[herbivore_species], aggression=0)
-        resources = Species(random.choice(["Trees", "Vines", "Clay"]), starting_population=10, aggression=0, has_prey=False)
-
-        # Assigning prey to species
-        carnivore_species.prey.append(herbivore_species)  # Carnivores eat herbivores
-        herbivore_species.prey.extend([herbs_species])  # Herbivores eat herbs
-        ecosystem.append(Forest(area, carnivore_species, herbivore_species, herbs_species, resources))
-
-    def main():
-        for forest in ecosystem:
-            forest.display_status()
-        
-        while True:
-            input("Press Enter to simulate next turn...\n\n\n")
-            for forest in ecosystem:
-                # Simulate herbivores eating herbs
-                for herbivore in forest.herbivores:
-                    if forest.herbs and any(h.current_population > 0 for h in forest.herbs):
-                        food = random.choice([h for h in forest.herbs if h.current_population > 0])
-                        print(f"{herbivore.name} eats {food.name}.")
-                        food.current_population = max(0, food.current_population - 1)
-                        herbivore.health = "Healthy"
-                    else:
-                        print(f"No food left in {forest.name}, {herbivore.name} is starving!")
-                        herbivore.health = "Starved"
-                        herbivore.current_population = max(0, herbivore.current_population - 1)
-
-                # Simulate carnivores hunting herbivores
-                for carnivore in forest.carnivores:
-                    if forest.herbivores and any(h.current_population > 0 for h in forest.herbivores):
-                        prey = random.choice([h for h in forest.herbivores if h.current_population > 0])
-                        print(f"{carnivore.name} hunts {prey.name}.")
-                        prey.current_population = max(0, prey.current_population - 1)
-                        carnivore.health = "Healthy"
-                    else:
-                        print(f"No herbivores left in {forest.name}, {carnivore.name} is starving!")
-                        carnivore.health = "Starved"
-                        carnivore.current_population = max(0, carnivore.current_population - 1)
-
-                # Apply symbolic AI rules
-                context = {
-                    'species': forest.carnivores + forest.herbivores + forest.herbs,
-                    'resources': forest.resources
-                }
-                forest.rule_engine.evaluate(context)
-
-                # Display the updated status
-                forest.display_status()
-
-    main()'''

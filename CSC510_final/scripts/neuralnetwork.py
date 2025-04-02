@@ -61,7 +61,7 @@ def main():
     trained_AI = train_neural()
 
     # Example test data
-    test_data = np.array([
+    '''test_data = np.array([
         [95, 80], # Action  
         [50, 15], # Warning
         [69, 22], # Nothing
@@ -72,10 +72,14 @@ def main():
         [100, 60], # Nothing  
         [42, 1], # Nothing
         [50, 9], # Nothing
-    ]) / 100.0
+    ]) / 100.0'''
+
+    test_data = np.array([[100, 20]]) / 100.0
 
     # Test the AI
     results = AI_test(trained_AI, test_data)
+
+    print('\n', results, '\n')
 
     print("\nChoices after training:")
     for input_data, action in results:

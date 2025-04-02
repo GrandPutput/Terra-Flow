@@ -1,6 +1,10 @@
-from neuralnetwork import train_neural, AI_test
+#from neuralnetwork import train_neural, AI_test
 import numpy as np
+import tkinter as tk
+from scripts.gui import App  # Import the App class from gui.py
 
+
+'''
 # Train the neural network
 model = train_neural()
 
@@ -22,3 +26,13 @@ results = AI_test(model, test_data)
 print("Predictions:")
 for input_data, action in results:
     print(f"Input {input_data} -> Predicted action: {action}")
+'''
+
+root = tk.Tk()
+root.geometry("900x600")  # Set the window size
+
+# Create the app and pass the root window to it
+app = App(root)
+
+# Run the Tkinter main loop
+root.mainloop()

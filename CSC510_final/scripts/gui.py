@@ -1,12 +1,21 @@
 import tkinter as tk
-from species_creation import ecosystem  # Import the ecosystem list
-from screens import TrainingScreen, TrainedScreen, GuiScreen, Area1Screen, Area2Screen, Area3Screen
-from symbolic_ai_test import RuleEngine, rule_resource_health, rule_predator_prey, rule_self_aggression, rule_reproduction
+from scripts.species_creation import ecosystem  # Import the ecosystem list
+from scripts.symbolic_ai_test import RuleEngine, rule_resource_health, rule_predator_prey, rule_self_aggression, rule_reproduction
+from scripts.player_stats import Player  # Import the Player class
+from scenes.area_1 import Area1Screen
+from scenes.area_2 import Area2Screen
+from scenes.area_3 import Area3Screen
+from scenes.gui_screen import GuiScreen
+from scenes.training_screens import TrainingScreen, TrainedScreen
 
 class App:
     def __init__(self, root):
         self.root = root
         self.root.title("Scene Switching Example")
+
+        # Create a Player instance
+        self.player = Player(name="John Doe")  # Replace "John Doe" with actual logic if needed
+        
         
         # Initialize all frames (screens)
         self.frames = {}
@@ -21,6 +30,10 @@ class App:
 
         # Start with the Training AI screen
         self.show_frame("Training AI")
+    
+    def get_player_instance(self):
+        """Return the Player instance."""
+        return self.player
 
     def show_frame(self, frame_name):
         # Hide all frames
@@ -29,6 +42,7 @@ class App:
         
         # Show the requested frame
         frame = self.frames[frame_name]
+        frame.pack(fill="both", expand=True)  # Ensure the frame is packed and displayed
         
         # Map frame names to their corresponding data-fetching methods
         data_fetch_methods = {
@@ -39,15 +53,37 @@ class App:
         }
 
         # Fetch and update data if the frame requires it
-        if frame_name in data_fetch_methods:
-            data = data_fetch_methods[frame_name]()  # Call the appropriate method
-            frame.update_data(data)
+        if frame_name == "gui":
+            ecosystem_data = self.get_ecosystem_data()  # Fetch ecosystem data
+            player_data = self.get_player_data()  # Fetch player data
+            frame.update_data(ecosystem_data, player_data)  # Update both data
+        elif frame_name in data_fetch_methods:
+            ecosystem_data = data_fetch_methods[frame_name]()  # Call the appropriate method
+            player_data = self.get_player_data()  # Fetch player data
+            frame.update_data(ecosystem_data, player_data)  # Pass both arguments
+
+    '''Fetch player data from player_stats.py.'''
+    def get_player_data(self):
+        from scripts.player_stats import Player  # Import the Player class
+        """Fetch player data from the existing Player instance."""
+        player = self.player  # Use the existing Player instance
+    
+        # Use the get_player_info method to fetch player stats
+        player_info = player.get_player_info()
         
-        frame.pack(fill="both", expand=True)
+        # Format player stats into a string
+        player_data = (
+            f"Name: {player_info['name']}\n"
+            f"Health: {player_info['health']}\n"
+            f"Energy: {player_info['level']}\n"
+            f"Actions: {player_info['actions']}\n"
+            f"Inventory: {', '.join([f'{item} (x{count})' for item, count in player_info['inventory'].items()]) if player_info['inventory'] else 'Empty'}"
+        )
+        return player_data
 
     def get_ecosystem_data(self):
         """Fetch ecosystem data from species_creation.py."""
-        from species_creation import ecosystem  # Import the ecosystem list
+        from scripts.species_creation import ecosystem  # Import the ecosystem list
         data = ""
         for forest in ecosystem:
             # Capture the display status of each forest
@@ -67,7 +103,7 @@ class App:
     def get_ecosystem_data_area(self, area):
         """Fetch ecosystem data for Area from species_creation.py."""
         area_check = area
-        from species_creation import ecosystem  # Import the ecosystem list
+        from scripts.species_creation import ecosystem  # Import the ecosystem list
         data = ""
         for forest in ecosystem:
             if forest.name == area_check:  # Filter forests for Area name
