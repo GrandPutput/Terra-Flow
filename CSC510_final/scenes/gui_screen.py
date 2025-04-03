@@ -41,13 +41,10 @@ class GuiScreen(tk.Frame):
         self.back_button = tk.Button(self, text="Explre Area 3", command=self.goto_area3)
         self.back_button.pack(side="left", padx=10)
 
-        '''
-        Add button to imporve house
-        Add button to farm
-        Add button to eat
-        Add button to craft
-        Add button to sleep
-        '''
+        # Button Enter Home
+        self.back_button = tk.Button(self, text="Go To Base", command=self.goto_base)
+        self.back_button.pack(side="left", padx=10)
+
 
     '''Update GUI output'''
     def update_data(self, ecosystem_data, player_data):
@@ -60,13 +57,13 @@ class GuiScreen(tk.Frame):
 
 
     def goto_area1(self):
-        # Switch back to the Training AI screen
         self.parent.show_frame("Area 1")
 
     def goto_area2(self):
-        # Switch back to the Training AI screen
         self.parent.show_frame("Area 2")
 
     def goto_area3(self):
-        # Switch back to the Training AI screen
         self.parent.show_frame("Area 3")
+
+    def goto_base(self):
+        self.parent.show_frame("Base")

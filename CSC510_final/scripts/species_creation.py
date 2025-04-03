@@ -56,8 +56,8 @@ def initialize_ecosystem():
         # Creating species classes
         carnivore_species = Species(random.choice(["Wolf", "Fox", "Bear"]), starting_population=10, aggression=4)
         herbivore_species = Species(random.choice(["Boar", "Deer", "Rabbit"]), starting_population=10, predators=[carnivore_species], aggression=0)
-        herbs_species = Species(random.choice(["Apples", "Corn", "Blueberry"]), starting_population=10, predators=[herbivore_species], aggression=0)
-        resources = Species(random.choice(["Trees", "Vines", "Clay"]), starting_population=10, aggression=0, has_prey=False)
+        herbs_species = Species(random.choice(["Basil", "Corn", "Blueberry"]), starting_population=10, predators=[herbivore_species], aggression=0)
+        resources = Species(random.choice(["Oak Trees", "Bamboo", "Elder Trees"]), starting_population=10, aggression=0, has_prey=False)
 
         # Assigning prey to species
         carnivore_species.prey.append(herbivore_species)  # Carnivores eat herbivores

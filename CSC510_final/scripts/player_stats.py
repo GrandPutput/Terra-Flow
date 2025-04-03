@@ -1,32 +1,20 @@
 class Player:
-    def __init__(self, name, energy = 10, actions = 10, health=100):
+    def __init__(self, name, energy = 10, actions = 10, health=100, armor = 0):
         # Player attributes
         self.name = name
         self.health = health
         self.energy = energy
         self.actions = actions
+        self.armor = armor
         self.inventory = {}  # Inventory as a dictionary {item_name: count}
-    
-    '''def get_player_instance(self):
-        return self.player'''
 
     def add_item_to_inventory(self, item, count=1):
-        """
-        Add an item to the player's inventory or increase its count.
-        :param item: Item to add
-        :param count: Number of items to add (default is 1)
-        """
         if item in self.inventory:
             self.inventory[item] += count
         else:
             self.inventory[item] = count
 
     def remove_item_from_inventory(self, item, count=1):
-        """
-        Remove an item or decrease its count in the player's inventory.
-        :param item: Item to remove
-        :param count: Number of items to remove (default is 1)
-        """
         if item in self.inventory:
             self.inventory[item] -= count
             if self.inventory[item] <= 0:
@@ -36,6 +24,9 @@ class Player:
         self.health += amount
         if self.health < 0:
             self.health = 0
+    
+    def update_armor(self, amount):
+        self.armor += amount
 
     # Update the player's energy.
     def energy_change(self, amount):
@@ -50,8 +41,9 @@ class Player:
         # Return a dictionary of the player's current stats.
         return {
             "name": self.name,
-            "level": self.energy,
+            "energy": self.energy,
             "actions": self.actions,
             "health": self.health,
-            "inventory": self.inventory
+            "inventory": self.inventory,
+            "armor": self.armor
         }

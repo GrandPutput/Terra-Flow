@@ -5,8 +5,11 @@ from scripts.player_stats import Player  # Import the Player class
 from scenes.area_1 import Area1Screen
 from scenes.area_2 import Area2Screen
 from scenes.area_3 import Area3Screen
+from scenes.base import BaseScreen
 from scenes.gui_screen import GuiScreen
 from scenes.training_screens import TrainingScreen, TrainedScreen
+from scripts.house import House  # Import the House class
+from scripts.neuralnetwork import train_neural, AI_test
 
 class App:
     def __init__(self, root):
@@ -15,7 +18,9 @@ class App:
 
         # Create a Player instance
         self.player = Player(name="John Doe")  # Replace "John Doe" with actual logic if needed
-        
+
+        # Create a House instance
+        self.base = House()
         
         # Initialize all frames (screens)
         self.frames = {}
@@ -27,13 +32,19 @@ class App:
         self.frames["Area 2"] = Area2Screen(self)
         self.frames["Area 3"] = Area3Screen(self)
         self.frames["gui"] = GuiScreen(self)
+        self.frames["Base"] = BaseScreen(self)
 
         # Start with the Training AI screen
         self.show_frame("Training AI")
+
     
     def get_player_instance(self):
         """Return the Player instance."""
         return self.player
+    
+    def get_base_instance(self):
+        """Return the Player instance."""
+        return self.base
 
     def show_frame(self, frame_name):
         # Hide all frames
@@ -49,7 +60,7 @@ class App:
             "gui": self.get_ecosystem_data,
             "Area 1": lambda: self.get_ecosystem_data_area("Area 1"),
             "Area 2": lambda: self.get_ecosystem_data_area("Area 2"),
-            "Area 3": lambda: self.get_ecosystem_data_area("Area 3"),
+            "Area 3": lambda: self.get_ecosystem_data_area("Area 3")
         }
 
         # Fetch and update data if the frame requires it
@@ -57,6 +68,8 @@ class App:
             ecosystem_data = self.get_ecosystem_data()  # Fetch ecosystem data
             player_data = self.get_player_data()  # Fetch player data
             frame.update_data(ecosystem_data, player_data)  # Update both data
+        elif frame_name == "Base":
+            frame.refresh_screen()  # Refresh the Base screen
         elif frame_name in data_fetch_methods:
             ecosystem_data = data_fetch_methods[frame_name]()  # Call the appropriate method
             player_data = self.get_player_data()  # Fetch player data
@@ -75,11 +88,29 @@ class App:
         player_data = (
             f"Name: {player_info['name']}\n"
             f"Health: {player_info['health']}\n"
-            f"Energy: {player_info['level']}\n"
+            f"Armor: {player_info['armor']}\n"
+            f"Energy: {player_info['energy']}\n"
             f"Actions: {player_info['actions']}\n"
             f"Inventory: {', '.join([f'{item} (x{count})' for item, count in player_info['inventory'].items()]) if player_info['inventory'] else 'Empty'}"
         )
         return player_data
+    
+    def get_base_data(self):
+        from scripts.house import House  # Import the House class
+        """Fetch base data from the existing House instance."""
+        base = self.base  # Use the existing House instance
+
+        # Use the get_base_info method to fetch base stats (assuming it exists)
+        base_info = base.get_house_info()
+
+        # Format base stats into a string
+        base_data = (
+            f"Base Health: {base_info['Base Status']}\n"
+            f"Walls Status: {'Repaired!' if base.walls else 'In need of repair!'}\n"
+            f"Farm Status: {'Active!' if base.farm else 'Inactive!'}\n"
+        )
+        return base_data
+    
 
     def get_ecosystem_data(self):
         """Fetch ecosystem data from species_creation.py."""
